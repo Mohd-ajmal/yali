@@ -1,17 +1,71 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yali/constants/app_colors.dart';
+import 'package:yali/hooks/get_accepted_order_request_field.dart';
 import 'package:yali/hooks/request_fields.dart';
+import 'package:yali/model/get_orders_model.dart';
+import 'package:yali/model/login_model.dart';
+import 'package:yali/providers/dashboard%20provider/create%20request%20provider/create_request_provider.dart';
+import 'package:yali/providers/dashboard%20provider/dashboard_provider.dart';
+import 'package:yali/screens/dashboard%20screen/create%20request/create_request.dart';
 import 'package:yali/screens/dashboard%20screen/widget/dashboard_card.dart';
+import 'package:yali/screens/history%20screen/history_screen.dart';
 import 'package:yali/screens/incoming%20request%20screen/incoming_request_screen.dart';
 import 'package:yali/screens/outgoing%20request%20screen/outgoing_request_screen.dart';
 import 'package:yali/screens/profile%20screen/profile_screen.dart';
+import 'package:yali/screens/track%20screen/track_screen.dart';
+import 'package:yali/service/service.dart';
 
-class DashBoardScreen extends StatelessWidget {
+import '../../model/show_orders_model.dart';
+
+class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({super.key});
 
   @override
+  State<DashBoardScreen> createState() => _DashBoardScreenState();
+}
+
+var _orders;
+var _getAcceptedOrders;
+
+class _DashBoardScreenState extends State<DashBoardScreen> {
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      getShowOrders();
+      getAcceptedOrders();
+    });
+    printData();
+  }
+
+  printData() async {
+    SharedPreferences sharedUser = await SharedPreferences.getInstance();
+    Map<String, dynamic> userMap =
+        jsonDecode(sharedUser.getString('userData')!);
+    var user = LoginModel.fromJson(userMap);
+    log(user.token.toString());
+  }
+
+  getShowOrders() async {
+    _orders = await HttpService.getRequesteOrders(context: context);
+  }
+
+  getAcceptedOrders() async {
+    _getAcceptedOrders = await HttpService.getAcceptedOrders(context: context);
+    log(_getAcceptedOrders);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<DashBoardProvider>(context, listen: true);
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(102),
@@ -52,44 +106,125 @@ class DashBoardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DashBoardCard(
-                height: 120,
-                width: double.infinity,
-                imagePath: "assets/svg/symbol_1.svg",
-                color: AppColors.createProject,
-                title: "Create Request"),
-            const SizedBox(height: 6),
+            GestureDetector(
+              onTap: () async {
+                context.loaderOverlay.show();
+                var itemResponse =
+                    await HttpService.getItemTypes(context: context);
+                log(itemResponse.runtimeType.toString());
+                var stateResponse =
+                    await HttpService.getState(context: context);
+                log(stateResponse.runtimeType.toString());
+                var districtResponse =
+                    await HttpService.getDistrict(context: context);
+                log(districtResponse.runtimeType.toString());
+                var hospitalsResponse = [];
+                    // await HttpService.getHospitals(context: context);
+                log(hospitalsResponse.runtimeType.toString());
+                var itemQuantityTypesResponse =
+                    await HttpService.getItemQuantityTypes(context: context);
+                log(itemQuantityTypesResponse.runtimeType.toString());
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ChangeNotifierProvider(
+                          create: (BuildContext context) =>
+                              CreateRequstProvider(),
+                          child: CreateRequest(
+                            districtModel: districtResponse,
+                            itemQuantityTypes: itemQuantityTypesResponse,
+                            itemTypesModel: itemResponse,
+                            stateModel: stateResponse,
+                            hospitaltypes: null,
+                          ),
+                        )));
+                context.loaderOverlay.hide();
+              },
+              child: DashBoardCard(
+                  height: 110,
+                  width: double.infinity,
+                  imagePath: "assets/svg/symbol_1.svg",
+                  color: AppColors.createProject,
+                  title: "Create Request"),
+            ),
+            const SizedBox(height: 7),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                DashBoardCard(
-                    height: 120,
-                    width: MediaQuery.of(context).size.width / 2.2,
-                    imagePath: "assets/svg/history.svg",
-                    color: AppColors.history,
-                    title: "History"),
-                DashBoardCard(
-                    height: 120,
-                    width: MediaQuery.of(context).size.width / 2.2,
-                    imagePath: "assets/svg/track.svg",
-                    color: AppColors.track,
-                    title: "Track")
+                GestureDetector(
+                  onTap: () {},
+                  child: GestureDetector(
+                    onTap: () async {
+                      context.loaderOverlay.show();
+                      var data = await HttpService.getOrders(context: context);
+                      if (data.runtimeType == null) {
+                        context.loaderOverlay.hide();
+                        provider.showSuccessSnackBar(
+                            context: context, msg: data);
+                      } else if (data.runtimeType == String) {
+                        context.loaderOverlay.hide();
+                        provider.showSuccessSnackBar(
+                            context: context, msg: data);
+                      } else if (data.runtimeType == GetOrders) {
+                        log("message");
+                        context.loaderOverlay.hide();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) =>
+                                    HistoryScreen(orders: data))));
+                      }
+                    },
+                    child: DashBoardCard(
+                        height: 120,
+                        width: MediaQuery.of(context).size.width / 2.2,
+                        imagePath: "assets/svg/history.svg",
+                        color: AppColors.history,
+                        title: "History"),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TrackerScreen()));
+                  },
+                  child: DashBoardCard(
+                      height: 120,
+                      width: MediaQuery.of(context).size.width / 2.2,
+                      imagePath: "assets/svg/track.svg",
+                      color: AppColors.track,
+                      title: "Track"),
+                )
               ],
             ),
             const SizedBox(height: 6),
-            DashBoardCard(
-                height: 120,
-                width: double.infinity,
-                imagePath: "assets/svg/manage.svg",
-                color: AppColors.manage,
-                title: "Manage"),
+            GestureDetector(
+              onTap: () {},
+              child: DashBoardCard(
+                  height: 110,
+                  width: double.infinity,
+                  imagePath: "assets/svg/manage.svg",
+                  color: AppColors.manage,
+                  title: "Manage"),
+            ),
             const SizedBox(height: 10.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Incoming Request",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Row(
+                  children: const [
+                    Text(
+                      "Incoming Request ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "(Order you requested)",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10.0,
+                          color: Colors.grey),
+                    ),
+                  ],
                 ),
                 InkWell(
                   onTap: () {
@@ -108,17 +243,28 @@ class DashBoardScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10.0),
             Column(
-              children: const [
-                RequestFields(),
+              children: [
+                RequestFields(showOrders: _orders),
               ],
             ),
             const SizedBox(height: 10.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Outgoing Request",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Row(
+                  children: const [
+                    Text(
+                      "Outgoing Request ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "(Order you have to send)",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                          fontSize: 10.0),
+                    ),
+                  ],
                 ),
                 InkWell(
                   onTap: () {
@@ -137,29 +283,12 @@ class DashBoardScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10.0),
             Column(
-              children: const [
-                RequestFields(),
+              children: [
+                GetAcceptedOrderRequestField(showOrders: _getAcceptedOrders),
               ],
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          const BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
-          const BottomNavigationBarItem(
-              icon: Icon(Icons.lock_clock), label: "today"),
-          BottomNavigationBarItem(
-              icon: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) => const ProfileScreen())));
-                  },
-                  child: const Icon(Icons.home)),
-              label: "Profile"),
-        ],
       ),
     );
   }

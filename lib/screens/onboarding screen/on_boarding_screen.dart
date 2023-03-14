@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:yali/constants/app_colors.dart';
+import 'package:yali/providers/login%20provider/login_provider.dart';
 import 'package:yali/screens/login%20screen/login_screen.dart';
 import 'package:yali/theme/theme.dart';
 
@@ -53,7 +55,9 @@ class OnBoardingScreen extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: ((context) => const LoginScreen())));
+                        builder: ((context) => ChangeNotifierProvider(
+                            create: (BuildContext context) => LoginProvider(),
+                            child: LoginScreen()))));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.orange,

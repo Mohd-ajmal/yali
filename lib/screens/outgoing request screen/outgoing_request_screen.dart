@@ -52,8 +52,8 @@ class _OutgoingRequestScreenState extends State<OutgoingRequestScreen> {
       body: Padding(
         padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
         child: Column(
-          children: const [
-            RequestFields(),
+          children: [
+            RequestFields(showOrders: null),
           ],
         ),
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yali/constants/app_colors.dart';
 import 'package:yali/screens/profile%20screen/widget/profile_screen_card.dart';
+import 'package:yali/screens/splash%20screen/splash_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,6 +12,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           )),
       body: Container(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -46,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: "Profile",
             ),
             const SizedBox(
-              height: 6,
+              height: 8,
             ),
             ProfileScreenCard(
               height: 64,
@@ -55,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: "Location",
             ),
             const SizedBox(
-              height: 6,
+              height: 8,
             ),
             ProfileScreenCard(
               height: 64,
@@ -64,13 +69,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: "Support",
             ),
             const SizedBox(
-              height: 6,
+              height: 8,
             ),
-            ProfileScreenCard(
-              height: 64,
-              width: double.infinity,
-              color: AppColors.blue,
-              title: "Logout",
+            GestureDetector(
+              onTap: ()async{
+                var prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> SplashScreen()), (route) => false);
+              },
+              child: ProfileScreenCard(
+                height: 64,
+                width: double.infinity,
+                color: AppColors.blue,
+                title: "Logout",
+              ),
             ),
           ],
         ),

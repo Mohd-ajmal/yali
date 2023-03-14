@@ -19,7 +19,8 @@ class ProfileScreenCard extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-          color: AppColors.profile, borderRadius: BorderRadius.circular(20)),
+          color:const Color(0xFFEBEEEF),
+           borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
           Padding(
@@ -29,7 +30,7 @@ class ProfileScreenCard extends StatelessWidget {
               style: const TextStyle(
                   fontSize: 18,
                   color: Colors.black,
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.w500),
             ),
           )
         ],
