@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:yali/constants/app_colors.dart';
 import 'package:yali/model/show_orders_model.dart';
 
-import '../model/get_requested_orders.dart';
+import '../../model/get_orders_model.dart';
 
-class SummaWidget extends StatelessWidget {
-  GetRequestedOrders? showOrder;
-  SummaWidget({super.key, required this.showOrder});
+class EditHistoryScreen extends StatelessWidget {
+  GetOrders showOrder;
+  int index;
+  EditHistoryScreen({super.key, required this.showOrder,required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class SummaWidget extends StatelessWidget {
                               "Order id",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            Text(showOrder?.orderId ?? "null")
+                            Text(showOrder.data[index].orderId ?? "null")
                           ],
                         ),
                       ),
@@ -68,7 +69,7 @@ class SummaWidget extends StatelessWidget {
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              showOrder?.status ?? "null",
+                              showOrder.data[index].status ?? "null",
                               style: TextStyle(color: Colors.green),
                             )
                           ],
@@ -84,8 +85,8 @@ class SummaWidget extends StatelessWidget {
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              showOrder?.meta?.vehicleStatus ?? "Waiting for\nresponse",
-                              style: TextStyle(color: Colors.red),
+                              showOrder.data[index].meta?.vehicleStatus ?? "Waiting for\nresponse",
+                              style: TextStyle(color: Colors.red,fontSize: 10.0),
                             )
                           ],
                         ),

@@ -64,187 +64,203 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log(widget.orders.toString());
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(102),
-        child: AppBar(
-          backgroundColor: AppColors.blue,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 24,
-              color: Colors.white,
+        child:  Container(
+            height: 102,
+            decoration: const BoxDecoration(
+              color: AppColors.blue,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20)),
             ),
-          ),
-          title: const Text(
-            "History",
-            style: TextStyle(
-                color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),
-          ),
-          centerTitle: true,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    builder: ((context) => StatefulBuilder(
-                      builder: (context, setState) => Container(
-                            height: 400,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(0.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  const Padding(
-                                     padding:  EdgeInsets.only(top: 20,left: 15),
-                                     child:  Text(
-                                      "Filter",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600),
-                                                                     ),
-                                   ),
-                                   ListTile(
-                                    title: const Text('All Orders',style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w600),),
-                                    trailing: Radio<SingingCharacter>(
-                                      value: SingingCharacter.allOrders,
-                                      groupValue: _character,
-                                      onChanged: (SingingCharacter? value) {
-                                        setState(() {
-                                          log("message");
-                                          _character = value;
-                                          changeState(list: _allOrders);
-                                        });
-                                        
-                                      },
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: const Text('Declined',style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w600),),
-                                    trailing: Radio<SingingCharacter>(
-                                      value: SingingCharacter.declined,
-                                      groupValue: _character,
-                                      onChanged: (SingingCharacter? value) {
-                                        setState(() {
-                                          log("message");
-                                          _character = value;
-                                          changeState(list: _declinedList);
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                 ListTile(
-                                    title: const Text('Accepted',style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w600),),
-                                    trailing: Radio<SingingCharacter>(
-                                      value: SingingCharacter.accepted,
-                                      groupValue: _character,
-                                      onChanged: (SingingCharacter? value) {
-                                        setState(() {
-                                          log("message");
-                                          _character = value;
-                                          changeState(list: _acceptedList);
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: const Text('Cancelled',style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w600),),
-                                    trailing: Radio<SingingCharacter>(
-                                      value: SingingCharacter.cancelled,
-                                      groupValue: _character,
-                                      onChanged: (SingingCharacter? value) {
-                                        setState(() {
-                                          log("message");
-                                          _character = value;
-                                          changeState(list: _cancelledList);
-                                          log(_cancelledList.length.toString());
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: const Text('Initiated',style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w600),),
-                                    trailing: Radio<SingingCharacter>(
-                                      value: SingingCharacter.initiated,
-                                      groupValue: _character,
-                                      onChanged: (SingingCharacter? value) {
-                                        setState(() {
-                                          _character = value;
-                                          changeState(list: _initiatedList);
-                                        });   
-                                      },
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: const Text('Processing',style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w600),),
-                                    trailing: Radio<SingingCharacter>(
-                                      value: SingingCharacter.processing,
-                                      groupValue: _character,
-                                      onChanged: (SingingCharacter? value) {
-                                        setState(() {
-                                          log("message");
-                                          _character = value;
-                                          changeState(list: _processingList);
-                                        });
-                                        
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 65,top: 10),
+                          child: SizedBox(
+                            height: 50.0,
+                            width: 50.0,
+                              child: Image.asset(
+                            "assets/images/yali_logo.png",
+                            color: Colors.white,
+                          )),
+                        ),
+                        const SizedBox(width: 10.0,),
+                        const Padding(
+                          padding:  EdgeInsets.only(left: 20,right: 100),
+                          child: Text(
+                            "History",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w500),
                           ),
-                       
-                    )),
-                  );
-                },
-                icon: const Icon(Icons.filter_list_alt)),
-            const SizedBox(
-              width: 20,
+                        ),
+                      ],
+                    ),
+                   Padding(
+                     padding: const EdgeInsets.only(right: 10),
+                     child: IconButton(
+                                     onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        builder: ((context) => StatefulBuilder(
+                          builder: (context, setState) => Container(
+                                height: 400,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(0.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      const Padding(
+                                         padding:  EdgeInsets.only(top: 20,left: 15),
+                                         child:  Text(
+                                          "Filter",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600),
+                                                                         ),
+                                       ),
+                                       ListTile(
+                                        title: const Text('All Orders',style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w600),),
+                                        trailing: Radio<SingingCharacter>(
+                                          value: SingingCharacter.allOrders,
+                                          groupValue: _character,
+                                          onChanged: (SingingCharacter? value) {
+                                            setState(() {
+                                              log("message");
+                                              _character = value;
+                                              changeState(list: _allOrders);
+                                            });
+                                            
+                                          },
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: const Text('Declined',style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w600),),
+                                        trailing: Radio<SingingCharacter>(
+                                          value: SingingCharacter.declined,
+                                          groupValue: _character,
+                                          onChanged: (SingingCharacter? value) {
+                                            setState(() {
+                                              log("message");
+                                              _character = value;
+                                              changeState(list: _declinedList);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                     ListTile(
+                                        title: const Text('Accepted',style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w600),),
+                                        trailing: Radio<SingingCharacter>(
+                                          value: SingingCharacter.accepted,
+                                          groupValue: _character,
+                                          onChanged: (SingingCharacter? value) {
+                                            setState(() {
+                                              log("message");
+                                              _character = value;
+                                              changeState(list: _acceptedList);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: const Text('Cancelled',style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w600),),
+                                        trailing: Radio<SingingCharacter>(
+                                          value: SingingCharacter.cancelled,
+                                          groupValue: _character,
+                                          onChanged: (SingingCharacter? value) {
+                                            setState(() {
+                                              log("message");
+                                              _character = value;
+                                              changeState(list: _cancelledList);
+                                              log(_cancelledList.length.toString());
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: const Text('Initiated',style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w600),),
+                                        trailing: Radio<SingingCharacter>(
+                                          value: SingingCharacter.initiated,
+                                          groupValue: _character,
+                                          onChanged: (SingingCharacter? value) {
+                                            setState(() {
+                                              _character = value;
+                                              changeState(list: _initiatedList);
+                                            });   
+                                          },
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: const Text('Processing',style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w600),),
+                                        trailing: Radio<SingingCharacter>(
+                                          value: SingingCharacter.processing,
+                                          groupValue: _character,
+                                          onChanged: (SingingCharacter? value) {
+                                            setState(() {
+                                              log("message");
+                                              _character = value;
+                                              changeState(list: _processingList);
+                                            });
+                                            
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                           
+                        )),
+                      );
+                                     },
+                                     icon: const Icon(Icons.filter_list_alt,color: Colors.white,)),
+                   ),
+                  ],
+                ),
+              ),
             ),
-            const Icon(
-              Icons.download,
-              size: 24,
-              color: Colors.white,
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-          ],
-        ),
+          )
       ),
+
       body: Padding(
         padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
         child: Column(
@@ -265,3 +281,5 @@ class _HistoryScreenState extends State<HistoryScreen> {
 }
 
 enum SingingCharacter { accepted, cancelled, initiated, processing, declined, allOrders }
+
+

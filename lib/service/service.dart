@@ -164,7 +164,7 @@ class HttpService {
 
     var url = Uri.parse(ApiContants.hospitals);
     try {
-      var response = await http.get(url,headers: headers);
+      var response = await http.get(url);
       log("${ApiContants.hospitals} -> ${response.statusCode}");
       log(response.body);
       if (response == null) {
@@ -177,7 +177,7 @@ class HttpService {
       } else if (response.statusCode == 200) {
         //context.loaderOverlay.hide();
 
-         var successModel = getHospitalsFromJson(response.body);
+         var successModel = getHospitalFromJson(response.body);
         return successModel;
       }
     } on SocketException {
@@ -257,7 +257,7 @@ class HttpService {
     Map<String, dynamic> userMap =
         jsonDecode(sharedUser.getString('userData')!);
     user = LoginModel.fromJson(userMap);
-    // log("user id ${user.token}");
+     log("user id ${user.token}");
     // log("user id ${user.data!.id}");
     var url = Uri.parse(ApiContants.orders);
 
@@ -286,7 +286,7 @@ class HttpService {
     }
     else if (response.statusCode == 200) {
       //context.loaderOverlay.hide();
-      log('message6');
+      log(response.body.runtimeType.toString());
       // log(response.body.toString());
       var successModel = getOrdersFromJson(response.body);
       return successModel;
@@ -306,11 +306,12 @@ class HttpService {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${user.token}',
       };
-  String addedUrl = ApiContants.showOrders + user.data!.id.toString();
+  String addedUrl = ApiContants.showOrders ;
+  // ?+ user.data!.id.toString();
   log("added url ${addedUrl}");
 
     var url = Uri.parse(addedUrl);
-    try {
+    // try {
       var response = await http.get(url, headers: headers);
       log(response.body.toString());
       log("${ApiContants.showOrders} -> ${response.statusCode}");
@@ -330,14 +331,14 @@ class HttpService {
         //log(successModel.data.orderId);
         return successModel;
       }
-    } on SocketException {
-      //context.loaderOverlay.hide();
-      log(Strings.internetIsNotConnected);
-      return Strings.internetIsNotConnected;
-    } catch (e) {
-      context.loaderOverlay.hide();
-      log("catch exception $e");
-    }
+    // } on SocketException {
+    //   //context.loaderOverlay.hide();
+    //   log(Strings.internetIsNotConnected);
+    //   return Strings.internetIsNotConnected;
+    // } catch (e) {
+    //   context.loaderOverlay.hide();
+    //   log("catch exception $e");
+    // }
   }
 
   static getRequesteOrders({required BuildContext context}) async {
@@ -348,6 +349,7 @@ class HttpService {
         jsonDecode(sharedUser.getString('userData')!);
     user = LoginModel.fromJson(userMap);
     log("user id ${user.data!.id.toString()}");
+    log("token ${user.token.toString()}");
 
   var headers = {
         'Accept': 'application/json',
@@ -356,9 +358,9 @@ class HttpService {
 
     var url = Uri.parse(ApiContants.getRequestedOrders);
     try {
-      var response = await http.get(url, headers: headers);
+      var response = await http.get(url,headers: headers);
       log(response.body.toString());
-      log("${ApiContants.showOrders} -> ${response.statusCode}");
+      log("${ApiContants.getRequestedOrders} -> ${response.statusCode}");
 
       if (response == null) {
         //context.loaderOverlay.hide();
@@ -370,7 +372,7 @@ class HttpService {
       } else if (response.statusCode == 200) {
         //context.loaderOverlay.hide();
         // log('message');
-        // log(response.body.toString());
+        log("response ${response.body.toString()}");
         var successModel = getRequestedOrdersFromJson(response.body);
         //log(successModel.data.orderId);
         return successModel;
@@ -381,7 +383,7 @@ class HttpService {
       return Strings.internetIsNotConnected;
     } catch (e) {
       context.loaderOverlay.hide();
-      log("catch exception $e");
+      //log("catch exception $e");
     }
   }
 
@@ -401,7 +403,7 @@ class HttpService {
 
     var url = Uri.parse(ApiContants.getAcceptedOrders);
     try {
-      var response = await http.get(url, headers: headers);
+      var response = await http.get(url,headers: headers);
       log(response.body.toString());
       log("${ApiContants.getAcceptedOrders} -> ${response.statusCode}");
 
@@ -426,11 +428,11 @@ class HttpService {
       return Strings.internetIsNotConnected;
     } catch (e) {
       context.loaderOverlay.hide();
-      log("catch exception $e");
+      //log("catch exception $e");
     }
   }
 
-  static postOrders({required BuildContext context}) async {
+  static postOrders({required BuildContext context,required String payload,required recieverId}) async {
     LoginModel user;
 
     SharedPreferences sharedUser = await SharedPreferences.getInstance();
@@ -443,12 +445,15 @@ class HttpService {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${user.token}',
       };
-
+  var body = {
+    "receiver_id": recieverId.toString(),
+    "payload": payload
+  };
+  log(recieverId.toString());
+  log(payload);
     var url = Uri.parse(ApiContants.postOrders);
     try {
-      var response = await http.post(url, headers: headers,body: {
-        
-      });
+      var response = await http.post(url, headers: headers,body: body);
       log(response.body.toString());
       log("${ApiContants.getAcceptedOrders} -> ${response.statusCode}");
 
@@ -484,6 +489,7 @@ class HttpService {
         "id":"${user.data!.id}",
         "reason":reason
       });
+      
       log("$url -> ${response.statusCode}");
       if(response.statusCode == 200) {
         return "Order cancelled";

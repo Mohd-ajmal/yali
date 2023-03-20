@@ -46,7 +46,7 @@ class Datum {
     int? senderId;
     int? receiverId;
     int? vId;
-    Payload? payload;
+    dynamic payload;
     int? payloadWeight;
     Meta? meta;
     String? status;
@@ -60,9 +60,9 @@ class Datum {
         senderId: json["sender_id"],
         receiverId: json["receiver_id"],
         vId: json["v_id"],
-        payload: Payload.fromJson(json["payload"]),
+        payload: json["payload"],
         payloadWeight: json["payload_weight"],
-        meta: Meta.fromJson(json["meta"]),
+        meta: Meta.fromJson(json["meta"] ?? ""),
         status: json["status"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
@@ -92,7 +92,7 @@ class Meta {
     String vehicleStatus;
 
     factory Meta.fromJson(Map<String, dynamic> json) => Meta(
-        vehicleStatus: json["vehicle_status"],
+        vehicleStatus: json["vehicle_status"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {

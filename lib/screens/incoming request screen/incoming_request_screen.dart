@@ -1,9 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:yali/constants/app_colors.dart';
+import 'package:yali/hooks/incoming_requst.dart';
 import 'package:yali/hooks/request_fields.dart';
+import 'package:yali/model/get_requested_orders.dart';
+import 'package:yali/model/show_orders_model.dart';
 
 class IncomingRequestScreen extends StatefulWidget {
-  const IncomingRequestScreen({super.key});
+  ShowOrders? showOrders;
+  IncomingRequestScreen({super.key, required this.showOrders});
 
   @override
   State<IncomingRequestScreen> createState() => _IncomingRequestScreenState();
@@ -12,6 +18,7 @@ class IncomingRequestScreen extends StatefulWidget {
 class _IncomingRequestScreenState extends State<IncomingRequestScreen> {
   @override
   Widget build(BuildContext context) {
+    log("instance ${widget.showOrders}");
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(102),
@@ -23,13 +30,12 @@ class _IncomingRequestScreenState extends State<IncomingRequestScreen> {
             ),
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 10,left: 20),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children:  [
                     InkWell(
                       onTap: (){
-                        
+                        Navigator.pop(context);
                       },
                       child:const Icon(
                         Icons.arrow_back_ios,
@@ -37,18 +43,28 @@ class _IncomingRequestScreenState extends State<IncomingRequestScreen> {
                         color: Colors.white,
                       ),
                     ),
-                    const Text(
-                      "Incoming Request",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    const Icon(
-                      Icons.download,
-                      size: 24,
-                      color: Colors.white,
-                    )
+                   
+                    const Padding(
+                       padding:  EdgeInsets.only(left: 50),
+                       child: Text(
+                        "Incoming Request",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500),
+                                         ),
+                     ),
+                      Padding(
+                          padding: const EdgeInsets.only(top: 10,left: 35),
+                          child: SizedBox(
+                            height: 50.0,
+                            width: 50.0,
+                              child: Image.asset(
+                            "assets/images/yali_logo.png",
+                            color: Colors.white,
+                          )),
+                        ),
+                   
                   ],
                 ),
               ),
@@ -58,7 +74,8 @@ class _IncomingRequestScreenState extends State<IncomingRequestScreen> {
         padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
         child: Column(
           children: [
-            RequestFields(showOrders: null),
+            
+            IncomingRequestField(showOrders: widget.showOrders),
           ],
         ),
       ),

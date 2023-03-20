@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:lottie/lottie.dart';
 import 'package:yali/model/get_accepted_orders.dart';
 import 'package:yali/model/get_requested_orders.dart';
 import 'package:yali/model/show_orders_model.dart';
@@ -27,6 +28,7 @@ class _GetAcceptedOrderRequestFieldState
     extends State<GetAcceptedOrderRequestField> {
   @override
   Widget build(BuildContext context) {
+    log("get accepted order ${widget.showOrders}");
     return Column(
       children: [
         Container(
@@ -38,7 +40,7 @@ class _GetAcceptedOrderRequestFieldState
           child:
               Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
             SizedBox(
-                width: 30,
+                width: 40,
                 child:
                     Text("Id", style: TextStyle(fontWeight: FontWeight.bold))),
             SizedBox(
@@ -55,14 +57,14 @@ class _GetAcceptedOrderRequestFieldState
                     style: TextStyle(fontWeight: FontWeight.bold))),
           ]),
         ),
-        Container(
+        widget.showOrders?.orderId != null ? Container(
           padding: const EdgeInsets.all(7.0),
           decoration: const BoxDecoration(
             color: Colors.white,
           ),
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             SizedBox(
-                width: 30,
+                width: 40,
                 child: Text(
                   widget.showOrders?.id.toString() ?? "null",
                 )),
@@ -228,7 +230,16 @@ class _GetAcceptedOrderRequestFieldState
                   ],
                 )),
           ]),
-        ),
+        ) : Container(
+          padding: const EdgeInsets.all(5.0),
+          height: 100.0,
+          width: 150.0,
+          child:  Center(child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text("No Records Found",style: TextStyle(fontSize: 12.0),),
+            ],
+          ),)),
       ],
     );
   }

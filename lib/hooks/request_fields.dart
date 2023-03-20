@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:yali/model/get_requested_orders.dart';
 import 'package:yali/model/show_orders_model.dart';
 import 'package:yali/screens/cancel%20screen/cancel_screen.dart';
+import 'package:yali/screens/some.dart';
 import 'package:yali/service/service.dart';
 
 class RequestFields extends StatefulWidget {
@@ -35,51 +36,52 @@ class _RequestFieldsState extends State<RequestFields> {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10), topRight: Radius.circular(10))),
           child:
-              Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
+              Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             SizedBox(
-                width: 40,
+                width: MediaQuery.of(context).size.width/6,
                 child:
                     Text("Id", style: TextStyle(fontWeight: FontWeight.bold))),
             SizedBox(
-                width: 100,
+                width: MediaQuery.of(context).size.width/4,
                 child: Text("Drone No",
                     style: TextStyle(fontWeight: FontWeight.bold))),
             SizedBox(
-                width: 100,
+                width: MediaQuery.of(context).size.width/3.9,
                 child: Text("Status",
                     style: TextStyle(fontWeight: FontWeight.bold))),
             SizedBox(
-                width: 70,
+                width: MediaQuery.of(context).size.width/4.5,
                 child: Text("Action",
                     style: TextStyle(fontWeight: FontWeight.bold))),
           ]),
         ),
-        Container(
+        
+        widget.showOrders?.orderId != null ? Container(
           padding: const EdgeInsets.all(7.0),
           decoration: const BoxDecoration(
             color: Colors.white,
           ),
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             SizedBox(
-                width: 40,
+                width: MediaQuery.of(context).size.width/6,
                 child: Text(
                   widget.showOrders?.id.toString() ?? "null",
                 )),
             SizedBox(
-                width: 100,
+                width: MediaQuery.of(context).size.width/4,
                 child: Text(
                   widget.showOrders?.orderId.toString() ?? "null",
                 )),
             SizedBox(
-                width: 100,
+                width: MediaQuery.of(context).size.width/3.9,
                 child: Text(
                   widget.showOrders?.status.toString() ?? "null",
                   style: TextStyle(color: Colors.green),
                 )),
             SizedBox(
-                width: 60,
+                width: MediaQuery.of(context).size.width/4.5,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     GestureDetector(
                       onTap: () => showModalBottomSheet(
@@ -98,7 +100,6 @@ class _RequestFieldsState extends State<RequestFields> {
                                     _visible = false;
                                     _cancelRequest = CancelRequest.someReason1;
                                   });
-
                                   return Future.value(true);
                                 },
                                 child: StatefulBuilder(
@@ -135,7 +136,7 @@ class _RequestFieldsState extends State<RequestFields> {
                                               _visible = false;
                                               _dynamicHeight = 300;
                                             }),
-                                            title: const Text("Some problem"),
+                                            title: const Text("Needed patient is refused to be here"),
                                           ),
                                           const SizedBox(height: 10.0),
                                           RadioListTile(
@@ -147,7 +148,7 @@ class _RequestFieldsState extends State<RequestFields> {
                                               _visible = false;
                                               _dynamicHeight = 300;
                                             }),
-                                            title: const Text("Some problem 2"),
+                                            title: const Text("Got item from another resource"),
                                           ),
                                           const SizedBox(height: 10.0),
                                           RadioListTile(
@@ -245,91 +246,102 @@ class _RequestFieldsState extends State<RequestFields> {
                         child: SvgPicture.asset("assets/svg/cross.svg"),
                       ),
                     ),
+                    const SizedBox(width: 25.0,),
                     GestureDetector(
                         onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: ((context) {
-                              return Container(
-                                height: 300,
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    Center(
-                                      child: Container(
-                                        height: 4,
-                                        width: 150,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        "Order Id : ${widget.showOrders!.orderId}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 20.0,
-                                    ),
-                                    Text(
-                                        "Order Status : ${widget.showOrders!.status}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: widget.showOrders!.status ==
-                                                    "accepted"
-                                                ? Colors.green
-                                                : widget.showOrders!.status ==
-                                                        "processing"
-                                                    ? Colors.yellow
-                                                    : widget.showOrders!
-                                                                .status ==
-                                                            "initiated"
-                                                        ? Colors.orange
-                                                        : Colors.red)),
-                                    const SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Vehicle Status : ${widget.showOrders!.meta.vehicleStatus}",
-                                          style: const  TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green),
-                                        ),
-                                        const SizedBox(width: 10.0,),
-                                        SizedBox(
-                                            height: 80.0,
-                                            width: 80.0,
-                                            child: LottieBuilder.asset(
-                                                "assets/images/lottieDron.json"))
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10.0),
-                                  ],
-                                ),
-                              );
-                            }),
-                            shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20.0),
-                                    topRight: Radius.circular(20.0))),
-                          );
+                          // showModalBottomSheet(
+                          //   context: context,
+                          //   builder: ((context) {
+                          //     return Container(
+                          //       height: 300,
+                          //       padding: const EdgeInsets.all(8.0),
+                          //       child: Column(
+                          //         mainAxisAlignment: MainAxisAlignment.start,
+                          //         crossAxisAlignment: CrossAxisAlignment.start,
+                          //         children: [
+                          //           const SizedBox(
+                          //             height: 10.0,
+                          //           ),
+                          //           Center(
+                          //             child: Container(
+                          //               height: 4,
+                          //               width: 150,
+                          //               color: Colors.grey,
+                          //             ),
+                          //           ),
+                          //           const SizedBox(
+                          //             height: 10.0,
+                          //           ),
+                          //           Center(
+                          //             child: Text(
+                          //               "Order Id : ${widget.showOrders!.orderId}",
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.bold),
+                          //             ),
+                          //           ),
+                          //           const SizedBox(
+                          //             height: 20.0,
+                          //           ),
+                          //           Text(
+                          //               "Order Status : ${widget.showOrders!.status}",
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.bold,
+                          //                   color: widget.showOrders!.status ==
+                          //                           "accepted"
+                          //                       ? Colors.green
+                          //                       : widget.showOrders!.status ==
+                          //                               "processing"
+                          //                           ? Colors.yellow
+                          //                           : widget.showOrders!
+                          //                                       .status ==
+                          //                                   "initiated"
+                          //                               ? Colors.orange
+                          //                               : Colors.red)),
+                          //           const SizedBox(
+                          //             height: 10.0,
+                          //           ),
+                          //           Row(
+                          //             children: [
+                          //               Text(
+                          //                 "Vehicle Status : ${widget.showOrders!.meta?.vehicleStatus}",
+                          //                 style: const  TextStyle(
+                          //                     fontWeight: FontWeight.bold,
+                          //                     color: Colors.green),
+                          //               ),
+                          //               const SizedBox(width: 10.0,),
+                          //               SizedBox(
+                          //                   height: 80.0,
+                          //                   width: 80.0,
+                          //                   child: LottieBuilder.asset(
+                          //                       "assets/images/lottieDron.json"))
+                          //             ],
+                          //           ),
+                          //           const SizedBox(height: 10.0),
+                          //         ],
+                          //       ),
+                          //     );
+                          //   }),
+                          //   shape: const RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.only(
+                          //           topLeft: Radius.circular(20.0),
+                          //           topRight: Radius.circular(20.0))),
+                          // );
+                          Navigator.push(context, MaterialPageRoute(builder: ((context) => SummaWidget(showOrder: widget.showOrders,))));
                         },
                         child: SvgPicture.asset("assets/svg/edit.svg")),
                   ],
                 )),
           ]),
-        ),
+        ) : Container(
+          padding: const EdgeInsets.all(5.0),
+          height: 100.0,
+          width: 150.0,
+          child:  Center(child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text("No Records Found",style: TextStyle(fontSize: 12.0),),
+            ],
+          ),)),
       ],
     );
   }

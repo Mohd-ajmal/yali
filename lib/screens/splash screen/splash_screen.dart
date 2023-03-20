@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: ((context) => const OnBoardingScreen())),
+            MaterialPageRoute(builder: ((context) => MyHome())),
             (route) => false);
       }
 
@@ -61,15 +61,21 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: Column(
-        children: [
-          Lottie.asset('assets/images/lottieDron.json'),
-          // SvgPicture.asset(
-          //   "assets/images/yali_name_logo.png",
-          // ),
-          Image.asset("assets/images/yali_name_logo.png")
-        ],
-      ),
-    ));
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                "assets/svg/yali_logo.svg",
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(60.0),
+              //   child: Lottie.asset('assets/images/blueDrone.json',repeat: true,reverse: true),
+              // ),
+              // Lottie.asset('assets/images/loading.json',height: 100,width: 150),
+              // const Text("Loading...")
+            ],
+          ),
+        ));
   }
 }

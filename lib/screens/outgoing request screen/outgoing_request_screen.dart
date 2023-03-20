@@ -23,27 +23,40 @@ class _OutgoingRequestScreenState extends State<OutgoingRequestScreen> {
             ),
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 10,left: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const [
-                    Icon(
-                      Icons.arrow_back_ios,
-                      size: 24,
-                      color: Colors.white,
-                    ),
-                    Text(
-                      "Outgoing Request",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Icon(
-                      Icons.download,
-                      size: 24,
-                      color: Colors.white,
-                    )
+                  children: [
+                     InkWell(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                       child:const Icon(
+                        Icons.arrow_back_ios,
+                        size: 24,
+                        color: Colors.white,
+                                         ),
+                     ),
+                     const Padding(
+                       padding:  EdgeInsets.only(left: 20),
+                       child: Text(
+                        "Outgoing Request",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500),
+                                         ),
+                     ),
+                    Padding(
+                          padding: const EdgeInsets.only(top: 10,left: 10),
+                          child: SizedBox(
+                            height: 50.0,
+                            width: 50.0,
+                              child: Image.asset(
+                            "assets/images/yali_logo.png",
+                            color: Colors.white,
+                          )),
+                        ),
                   ],
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:yali/model/get_requested_orders.dart';
 import 'package:yali/service/service.dart';
 
@@ -17,46 +18,57 @@ class TodayRequest extends StatelessWidget {
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(102),
             child: Container(
-              height: 102,
-              decoration: const BoxDecoration(
-                color: AppColors.blue,
-                borderRadius:
-                    BorderRadius.only(bottomLeft: Radius.circular(20)),
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      Spacer(),
-                      Text(
-                        "Today request",
-                        style: TextStyle(
+            height: 102,
+            decoration: const BoxDecoration(
+              color: AppColors.blue,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20)),
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 24,top: 10),
+                          child: SizedBox(
+                            height: 50.0,
+                            width: 50.0,
+                              child: Image.asset(
+                            "assets/images/yali_logo.png",
                             color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      Spacer(),
-                      Icon(
-                        Icons.download,
-                        size: 24,
-                        color: Colors.white,
-                      ),
-                      SizedBox(width: 10.0)
-                    ],
-                  ),
+                          )),
+                        ),
+                        const SizedBox(width: 10.0,),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 20,right: 109),
+                          child: Text(
+                            "Today Request",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ],
+                    ),
+                   
+                  ],
                 ),
               ),
-            )),
+            ),
+          )),
         body: Container(
           child: FutureBuilder(
             future: HttpService.getRequesteOrders(context: context),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.data.runtimeType == null) {
-                  return const  Center(
+                  return const Center(
                     child: Text("Something went wrong"),
                   );
                 } else if (snapshot.data.runtimeType == String) {
@@ -83,7 +95,20 @@ class TodayRequest extends StatelessWidget {
                   ),
                 );
               }
-              return const CircularProgressIndicator();
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('No Data...'),
+                  Center(
+                    child: Container(
+                        padding: const EdgeInsets.all(5.0),
+                        height: 200.0,
+                        width: 200.0,
+                        child: Lottie.asset("assets/images/noData.json")),
+                  ),
+                ],
+              );
             },
           ),
         )

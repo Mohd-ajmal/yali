@@ -26,16 +26,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: AppColors.blue,
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20)),
             ),
-            child: const Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: Text(
-                  "Profile",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w500),
-                ),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 146),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: SizedBox(
+                              height: 50.0,
+                              width: 50.0,
+                                child: Image.asset(
+                              "assets/images/yali_logo.png",
+                              color: Colors.white,
+                            )),
+                          ),
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 10,left: 90),
+                      child: Text(
+                        "Profile",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           )),

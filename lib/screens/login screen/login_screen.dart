@@ -24,7 +24,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<LoginProvider>(context, listen: true);
     return Scaffold(
-      backgroundColor: AppColors.blue,
+      backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -97,8 +97,12 @@ class LoginScreen extends StatelessWidget {
                         return null;
                       },
                       decoration: InputDecoration(
-                          disabledBorder: OutlineInputBorder(
+                           disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -108,11 +112,13 @@ class LoginScreen extends StatelessWidget {
                           ),
                           fillColor: Colors.white,
                           filled: true,
+                          
                           hintText: "E-mail",
                           prefixIcon: const Icon(Icons.mail))),
                   const SizedBox(height: 15.0),
                   TextFormField(
                       controller: provider.passwordController,
+                      obscureText: true,
                       validator: (value) {
                         if (value == null) {
                           return "Field can't be empty";
@@ -172,7 +178,7 @@ class LoginScreen extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context) =>
                                        ChangeNotifierProvider(create: (BuildContext context) => BottomNavigationProvider(),
-                                       child: BottomNavigationScreen())),
+                                       child: const BottomNavigationScreen())),
                               (route) => false);
                           }
                           

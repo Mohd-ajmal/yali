@@ -13,27 +13,27 @@ class ShowOrders {
         required this.data,
     });
 
-    Data data;
+    List<Datum> data;
 
     factory ShowOrders.fromJson(Map<String, dynamic> json) => ShowOrders(
-        data: Data.fromJson(json["data"]),
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }
 
-class Data {
-    Data({
+class Datum {
+    Datum({
         required this.id,
         required this.orderId,
         required this.userId,
         required this.senderId,
-        required this.receiverId,
-        required this.vId,
-        required this.payload,
-        required this.payloadWeight,
+        this.receiverId,
+        this.vId,
+        this.payload,
+        this.payloadWeight,
         required this.meta,
         required this.status,
         required this.createdAt,
@@ -44,23 +44,23 @@ class Data {
     String orderId;
     int userId;
     int senderId;
-    int receiverId;
-    int vId;
-    Payload payload;
-    int payloadWeight;
+    int? receiverId;
+    int? vId;
+    dynamic payload;
+    dynamic payloadWeight;
     Meta meta;
     String status;
     DateTime createdAt;
     DateTime updatedAt;
 
-    factory Data.fromJson(Map<String, dynamic> json) => Data(
+    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
         orderId: json["order_id"],
         userId: json["user_id"],
         senderId: json["sender_id"],
         receiverId: json["receiver_id"],
         vId: json["v_id"],
-        payload: Payload.fromJson(json["payload"]),
+        payload: json["payload"],
         payloadWeight: json["payload_weight"],
         meta: Meta.fromJson(json["meta"]),
         status: json["status"],
@@ -75,7 +75,7 @@ class Data {
         "sender_id": senderId,
         "receiver_id": receiverId,
         "v_id": vId,
-        "payload": payload.toJson(),
+        "payload": payload,
         "payload_weight": payloadWeight,
         "meta": meta.toJson(),
         "status": status,
@@ -86,36 +86,16 @@ class Data {
 
 class Meta {
     Meta({
-        this.reason,
+        this.vehicleStatus,
     });
 
-    dynamic reason;
+    dynamic vehicleStatus;
 
     factory Meta.fromJson(Map<String, dynamic> json) => Meta(
-        reason: json["reason"],
+        vehicleStatus: json["vehicle_status"],
     );
 
     Map<String, dynamic> toJson() => {
-        "reason": reason,
-    };
-}
-
-class Payload {
-    Payload({
-        required this.blood,
-        required this.vaccine,
-    });
-
-    int blood;
-    int vaccine;
-
-    factory Payload.fromJson(Map<String, dynamic> json) => Payload(
-        blood: json["blood"],
-        vaccine: json["vaccine"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "blood": blood,
-        "vaccine": vaccine,
+        "vehicle_status": vehicleStatus,
     };
 }
